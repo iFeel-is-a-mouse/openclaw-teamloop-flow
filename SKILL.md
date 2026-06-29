@@ -13,6 +13,8 @@ intent: >
 metadata:
   author: iClaw & iFeel
   version: "2.3"
+  openclaw:
+    emoji: "🔄"
 ---
 
 # team-loop — Autonomous Task Loop Engine
