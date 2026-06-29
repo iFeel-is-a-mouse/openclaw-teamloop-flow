@@ -6,40 +6,39 @@
 
 ## RSF Main Loop (11 steps, 14 flows)
 
-```
-/goal ──────────────────────────────────────────────────────────────────────┐
-                                                                            │
-  ┌─ seq1  main(GoalAgent)    Parse → StandardGoal                          │
-  │         f1 sync ──────────────────────────────┐                         │
-  ├─ seq2  main(Planner)      Read RDF → 3-tier KR│→ TaskDAG+TokEst + ADR  │
-  │         f2 sync ────────────────────────┐     │                         │
-  ├─ seq3  main(Controller)   Pick KR ──────┤───→ TaskUnit + Snap(t0)      │
-  │         /status+budget guard             │     │                         │
-  │         f3 sync ─────────────────────────┤     │                         │
-  ├─ seq4  main(Controller)   Spawn coder [300s]   │                         │
-  │         f4 async ────────────────────────┼───→ coder                     │
-  ├─ seq5  coder(Executor)    TDD 3-step ────┼───→ TaskResult+commit        │
-  │         f5 async ←───────────────────────┘     │                         │
-  ├─ seq6  main(Monitor)      Distribute [120s] ───┼──→ reviewer + tester   │
-  │         f6→reviewer  f7→tester                  │     │                  │
-  ├─ seq7  reviewer(Critic)   Correctness ─────────┼───→ Verdict            │
-  │         tester(Critic)     Dynamic+Cov ─────────┼───→ Verdict+CovRpt    │
-  │         f8,f9 async ←───────────────────────────┘     │                  │
-  ├─ seq8  main(Monitor)      Collect → spawn auditor ────┼──→ auditor       │
-  │         f10 async ──────────────────────────────────→ │                  │
-  ├─ seq9  auditor(Critic)    13-item checklist ──────────┼───→ Verdict      │
-  │         f11 async ←───────────────────────────────────┘                  │
-  ├─ seq10 main(Controller)   2/3 vote → Decision                          │
-  │         → TokenReport + Snap(t1) + RoundSummary                         │
-  │         f12 async ──────────────────────→ publicist                     │
-  ├─ seq11 publicist(Memory)  RDF memory → MemoryEntry                      │
-  │         f13 async ←── feedback to seq2 ──────────────────────────────────┤
-  │                                                                          │
-  │         fR: retry|next_kr ──→ seq3 ───────────────────────────────────┐ │
-  └────────────────────────────────────────────────────────────────────────┘ │
-                                                                             │
-  Stop conditions: all-KR | FATAL(3x fail) | timeout | block | BUDGET |     │
-  max_rounds | stagnation(3x) | MANUAL_STOP | escape | watchdog ◄───────────┘
+```mermaid
+flowchart TD
+    GOAL["/goal &lt;target&gt;"]
+    S1["seq1 main(GoalAgent)&#58; Parse → StandardGoal"]
+    S2["seq2 main(Planner)&#58; Read RDF → 3-tier KR → TaskDAG + TokenEst"]
+    S3["seq3 main(Controller)&#58; Pick KR → TaskUnit + Snap(t0)&#58; /status + budget guard"]
+    S4["seq4 main(Controller)&#58; Spawn coder [300s]"]
+    S5["seq5 coder(Executor)&#58; TDD 3-step → TaskResult + commit"]
+    S6["seq6 main(Monitor)&#58; Distribute [120s]"]
+    S7R["seq7 reviewer(Critic)&#58; Correctness → Verdict"]
+    S7T["seq7 tester(Critic)&#58; Dynamic + Coverage → Verdict + CovRpt"]
+    S8["seq8 main(Monitor)&#58; Collect → spawn auditor"]
+    S9["seq9 auditor(Critic)&#58; 13-item checklist → Verdict"]
+    S10["seq10 main(Controller)&#58; 2/3 vote → Decision + TokenReport + Snap(t1)"]
+    S11["seq11 publicist(Memory)&#58; RDF memory → MemoryEntry"]
+    STOP["Stop: all-KR | FATAL | BUDGET | max_rounds | stagnation | escape | watchdog"]
+
+    GOAL --> S1
+    S1 -->|f1 StandardGoal| S2
+    S2 -->|f2 TaskDAG+TokEst| S3
+    S3 -->|f3 TaskUnit| S4
+    S4 -->|f4 async [300s]| S5
+    S5 -->|f5 TaskResult| S6
+    S6 -->|f6 TaskResult| S7R
+    S6 -->|f7 TaskResult| S7T
+    S7R -->|f8 Verdict| S8
+    S7T -->|f9 Verdict+CovRpt| S8
+    S8 -->|f10 TaskResult+Verdict×2+CovRpt| S9
+    S9 -->|f11 Verdict| S10
+    S10 -->|f12 TaskResult+Decision| S11
+    S11 -->|f13 MemoryEntry feedback| S2
+    S10 -->|fR retry&#124;next_kr| S3
+    S10 --> STOP
 ```
 
 ---
@@ -97,40 +96,39 @@
 
 ## RSF 主循环 (11步 14流)
 
-```
-/goal ──────────────────────────────────────────────────────────────────────┐
-                                                                            │
-  ┌─ seq1  main(GoalAgent)    解析 → StandardGoal                           │
-  │         f1 sync ──────────────────────────────┐                          │
-  ├─ seq2  main(Planner)      读RDF → 三层KR ────│→ TaskDAG+TokEst + ADR   │
-  │         f2 sync ────────────────────────┐     │                          │
-  ├─ seq3  main(Controller)   取就绪KR ─────┤───→ TaskUnit + Snap(t0)       │
-  │         /status+预算守卫                  │     │                          │
-  │         f3 sync ─────────────────────────┤     │                          │
-  ├─ seq4  main(Controller)   下发coder [300s]     │                          │
-  │         f4 async ────────────────────────┼───→ coder                      │
-  ├─ seq5  coder(Executor)    TDD三步 ──────┼───→ TaskResult+commit          │
-  │         f5 async ←──────────────────────┘     │                          │
-  ├─ seq6  main(Monitor)      分发 [120s] ────────┼──→ reviewer + tester     │
-  │         f6→reviewer  f7→tester                  │     │                   │
-  ├─ seq7  reviewer(Critic)   正确性审查 ─────────┼───→ Verdict               │
-  │         tester(Critic)     动态验证+Cov ──────┼───→ Verdict+CovRpt        │
-  │         f8,f9 async ←─────────────────────────┘     │                    │
-  ├─ seq8  main(Monitor)      收→发auditor ────────────┼──→ auditor          │
-  │         f10 async ────────────────────────────────→ │                    │
-  ├─ seq9  auditor(Critic)    13项checklist ───────────┼───→ Verdict          │
-  │         f11 async ←────────────────────────────────┘                     │
-  ├─ seq10 main(Controller)   2/3裁决 → Decision                              │
-  │         → TokenReport + Snap(t1) + RoundSummary                           │
-  │         f12 async ──────────────────────→ publicist                       │
-  ├─ seq11 publicist(Memory)  沉淀RDF → MemoryEntry                           │
-  │         f13 async ←── 反馈至seq2 ────────────────────────────────────────┤
-  │                                                                           │
-  │         fR: retry|next_kr ──→ seq3 ────────────────────────────────────┐ │
-  └─────────────────────────────────────────────────────────────────────────┘ │
-                                                                              │
-  停止条件: all-KR | FATAL(连3失败) | 超时 | 阻塞 | BUDGET | max_rounds |     │
-  stagnation(连3轮) | MANUAL_STOP | 逃逸 | watchdog ◄────────────────────────┘
+```mermaid
+flowchart TD
+    GOAL["/goal &lt;目标&gt;"]
+    S1["seq1 main(GoalAgent)&#58; 解析 → StandardGoal"]
+    S2["seq2 main(Planner)&#58; 读RDF → 三层KR → TaskDAG + TokenEst"]
+    S3["seq3 main(Controller)&#58; 取就绪KR → TaskUnit + Snap(t0)&#58; /status + 预算守卫"]
+    S4["seq4 main(Controller)&#58; 下发coder [300s]"]
+    S5["seq5 coder(Executor)&#58; TDD三步 → TaskResult + commit"]
+    S6["seq6 main(Monitor)&#58; 分发 [120s]"]
+    S7R["seq7 reviewer(Critic)&#58; 正确性审查 → Verdict"]
+    S7T["seq7 tester(Critic)&#58; 动态验证 + 覆盖率 → Verdict + CovRpt"]
+    S8["seq8 main(Monitor)&#58; 收判决 → 发auditor"]
+    S9["seq9 auditor(Critic)&#58; 13项checklist → Verdict"]
+    S10["seq10 main(Controller)&#58; 2/3裁决 → Decision + TokenReport + Snap(t1)"]
+    S11["seq11 publicist(Memory)&#58; 沉淀RDF记忆 → MemoryEntry"]
+    STOP["停止: all-KR | FATAL | BUDGET | max_rounds | stagnation | 逃逸 | watchdog"]
+
+    GOAL --> S1
+    S1 -->|f1 StandardGoal| S2
+    S2 -->|f2 TaskDAG+TokEst| S3
+    S3 -->|f3 TaskUnit| S4
+    S4 -->|f4 async [300s]| S5
+    S5 -->|f5 TaskResult| S6
+    S6 -->|f6 TaskResult| S7R
+    S6 -->|f7 TaskResult| S7T
+    S7R -->|f8 Verdict| S8
+    S7T -->|f9 Verdict+CovRpt| S8
+    S8 -->|f10 TaskResult+Verdict×2+CovRpt| S9
+    S9 -->|f11 Verdict| S10
+    S10 -->|f12 TaskResult+Decision| S11
+    S11 -->|f13 MemoryEntry 反馈| S2
+    S10 -->|fR retry&#124;next_kr| S3
+    S10 --> STOP
 ```
 
 ---
