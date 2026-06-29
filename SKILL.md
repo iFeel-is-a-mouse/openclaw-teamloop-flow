@@ -1,11 +1,12 @@
 ---
 name: team-loop
 description: >
-  Goal-driven autonomous task loop engine. Triggered by /goal, the MA agent
-  team autonomously executes the full plan→execute→verify→memorize→replan
-  cycle. Humans define the goal but stay out of the loop. Suitable for
-  quantifiable goals such as coverage improvement, code migration, batch
-  refactoring, and test completion.
+  Goal-driven autonomous task loop engine. Triggered by /goal or /team-loop,
+  the MA agent team autonomously executes plan→execute→verify→memorize→replan
+  cycles. Humans define the goal but stay out of the loop. Suitable for
+  quantifiable goals: coverage, migration, refactoring, test completion.
+  Intent keywords: autonomous-loop, self-verifying, TDD, adversarial-validation,
+  breakpoint-resume, token-budget, coverage-gate, snapshot, interaction-id.
 metadata:
   author: iClaw & iFeel
   version: "2.3"
@@ -17,7 +18,7 @@ metadata:
 
 Upgrades the MA agent team from human-driven waterfall delivery to goal-driven autonomous looping.
 
-- **Input:** `/goal <quantifiable goal>`
+- **Input:** `/goal <quantifiable goal>` or `/team-loop <goal>`
 - **Flow:** Initialize → Decompose KRs → Dispatch agents → Adversarial verification → Memorize → Next round
 - **Output:** Incremental deliverables + State snapshots + Audit reports + Token bills
 - **Human involvement only:** Goal setting, abnormal termination, budget confirmation
@@ -36,6 +37,7 @@ Upgrades the MA agent team from human-driven waterfall delivery to goal-driven a
 
 ```
 /goal <quantifiable goal> [budget≤¥N] [max_rounds=N]
+/team-loop <goal>
 ```
 
 Examples:
@@ -625,7 +627,7 @@ L1 syntax (pytest collection succeeds) → L2 functional (pass + line > 80% + br
 
 ## Verification Checklist
 
-- [ ] /goal recognizes and rejects non-quantifiable goals
+- [ ] /goal and /team-loop recognize and reject non-quantifiable goals
 - [ ] seq0 initialization complete (loop_id/interaction_id/directories/watchdog/config.json)
 - [ ] Three-tier KRs correctly decomposed
 - [ ] coder TDD three-step, does not self-review
@@ -655,7 +657,7 @@ L1 syntax (pytest collection succeeds) → L2 functional (pass + line > 80% + br
 ## FAQ
 
 **Q: team-loop vs team dev mode?**
-`/goal` → team-loop autonomous loop; `team dev` → 12-stage waterfall. Same main.
+`/goal` or `/team-loop` → team-loop autonomous loop; `团队研发` → 12-stage waterfall. Same main.
 
 **Q: What goals are unsuitable?**
 Non-quantifiable ("improve quality"), exploratory ("try optimizing"), requiring frequent human judgment.
