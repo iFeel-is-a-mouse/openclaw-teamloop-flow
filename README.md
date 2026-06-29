@@ -7,38 +7,45 @@
 ## RSF Main Loop (11 steps, 14 flows)
 
 ```mermaid
-flowchart TD
-    GOAL["/goal &lt;target&gt;"]
-    S1["seq1 main(GoalAgent)&#58; Parse → StandardGoal"]
-    S2["seq2 main(Planner)&#58; Read RDF → 3-tier KR → TaskDAG + TokenEst"]
-    S3["seq3 main(Controller)&#58; Pick KR → TaskUnit + Snap(t0) | /status + budget guard"]
-    S4["seq4 main(Controller)&#58; Spawn coder 300s"]
-    S5["seq5 coder(Executor)&#58; TDD 3-step → TaskResult + commit"]
-    S6["seq6 main(Monitor)&#58; Distribute 120s"]
-    S7R["seq7 reviewer(Critic)&#58; Correctness → Verdict"]
-    S7T["seq7 tester(Critic)&#58; Dynamic + Coverage → Verdict + CovRpt"]
-    S8["seq8 main(Monitor)&#58; Collect → spawn auditor"]
-    S9["seq9 auditor(Critic)&#58; 13-item checklist → Verdict"]
-    S10["seq10 main(Controller)&#58; 2/3 vote → Decision + TokenReport + Snap(t1)"]
-    S11["seq11 publicist(Memory)&#58; RDF memory → MemoryEntry"]
-    STOP["Stop: all-KR | FATAL | BUDGET | max_rounds | stagnation | escape | watchdog"]
+sequenceDiagram
+    participant main
+    participant coder
+    participant reviewer
+    participant tester
+    participant auditor
+    participant publicist
 
-    GOAL --> S1
-    S1 -->|"f1 StandardGoal"| S2
-    S2 -->|"f2 TaskDAG + TokEst"| S3
-    S3 -->|"f3 TaskUnit"| S4
-    S4 -->|"f4 async 300s"| S5
-    S5 -->|"f5 TaskResult"| S6
-    S6 -->|"f6 TaskResult"| S7R
-    S6 -->|"f7 TaskResult"| S7T
-    S7R -->|"f8 Verdict"| S8
-    S7T -->|"f9 Verdict + CovRpt"| S8
-    S8 -->|"f10 TskRes + Verdictx2 + CovRpt 120s"| S9
-    S9 -->|"f11 Verdict"| S10
-    S10 -->|"f12 TaskResult + Decision"| S11
-    S11 -->|"f13 MemoryEntry feedback"| S2
-    S10 -->|"fR retry / next_kr"| S3
-    S10 --> STOP
+    Note over main: seq1 GoalAgent(LLM) Parse → StandardGoal
+    Note over main: seq2 Planner(LLM) Read RDF → 3-tier KR → TaskDAG + TokenEst + ADR
+
+    main->>main: seq3 /status + budget guard → TaskUnit + Snap(t0)
+    main->>coder: seq4/5 f4 async 300s: TaskUnit
+    activate coder
+    coder-->>main: f5 TaskResult + commit
+    deactivate coder
+
+    main->>reviewer: seq6 f6 async 120s: TaskResult
+    main->>tester: seq6 f7 async 120s: TaskResult
+    activate reviewer
+    activate tester
+    reviewer-->>main: seq7 f8 Verdict
+    deactivate reviewer
+    tester-->>main: seq7 f9 Verdict + CoverageReport
+    deactivate tester
+
+    main->>auditor: seq8 f10 async 120s: TaskResult + Verdictx2 + CovRpt
+    activate auditor
+    auditor-->>main: seq9 f11 Verdict (13-item checklist)
+    deactivate auditor
+
+    Note over main: seq10 2/3 vote → Decision + TokenReport + Snap(t1) + RoundSummary
+
+    main->>publicist: seq10 f12 TaskResult + Decision
+    activate publicist
+    publicist-->>main: seq11 f13 MemoryEntry (feedback → seq2)
+    deactivate publicist
+
+    Note over main: fR: retry|next_kr → seq3 (max 3 retries)
 ```
 
 ---
@@ -97,38 +104,45 @@ flowchart TD
 ## RSF 主循环 (11步 14流)
 
 ```mermaid
-flowchart TD
-    GOAL["/goal &lt;目标&gt;"]
-    S1["seq1 main(GoalAgent)&#58; 解析 → StandardGoal"]
-    S2["seq2 main(Planner)&#58; 读RDF → 三层KR → TaskDAG + TokenEst"]
-    S3["seq3 main(Controller)&#58; 取就绪KR → TaskUnit + Snap(t0) | /status + 预算守卫"]
-    S4["seq4 main(Controller)&#58; 下发coder 300s"]
-    S5["seq5 coder(Executor)&#58; TDD三步 → TaskResult + commit"]
-    S6["seq6 main(Monitor)&#58; 分发 120s"]
-    S7R["seq7 reviewer(Critic)&#58; 正确性审查 → Verdict"]
-    S7T["seq7 tester(Critic)&#58; 动态验证 + 覆盖率 → Verdict + CovRpt"]
-    S8["seq8 main(Monitor)&#58; 收判决 → 发auditor"]
-    S9["seq9 auditor(Critic)&#58; 13项checklist → Verdict"]
-    S10["seq10 main(Controller)&#58; 2/3裁决 → Decision + TokenReport + Snap(t1)"]
-    S11["seq11 publicist(Memory)&#58; 沉淀RDF记忆 → MemoryEntry"]
-    STOP["停止: all-KR | FATAL | BUDGET | max_rounds | stagnation | 逃逸 | watchdog"]
+sequenceDiagram
+    participant main
+    participant coder
+    participant reviewer
+    participant tester
+    participant auditor
+    participant publicist
 
-    GOAL --> S1
-    S1 -->|"f1 StandardGoal"| S2
-    S2 -->|"f2 TaskDAG + TokEst"| S3
-    S3 -->|"f3 TaskUnit"| S4
-    S4 -->|"f4 async 300s"| S5
-    S5 -->|"f5 TaskResult"| S6
-    S6 -->|"f6 TaskResult"| S7R
-    S6 -->|"f7 TaskResult"| S7T
-    S7R -->|"f8 Verdict"| S8
-    S7T -->|"f9 Verdict + CovRpt"| S8
-    S8 -->|"f10 TskRes + Verdictx2 + CovRpt 120s"| S9
-    S9 -->|"f11 Verdict"| S10
-    S10 -->|"f12 TaskResult + Decision"| S11
-    S11 -->|"f13 MemoryEntry 反馈"| S2
-    S10 -->|"fR retry / next_kr"| S3
-    S10 --> STOP
+    Note over main: seq1 GoalAgent(LLM) 解析 → StandardGoal
+    Note over main: seq2 Planner(LLM) 读RDF → 三层KR → TaskDAG + TokenEst + ADR
+
+    main->>main: seq3 /status + 预算守卫 → TaskUnit + Snap(t0)
+    main->>coder: seq4/5 f4 async 300s: TaskUnit
+    activate coder
+    coder-->>main: f5 TaskResult + commit
+    deactivate coder
+
+    main->>reviewer: seq6 f6 async 120s: TaskResult
+    main->>tester: seq6 f7 async 120s: TaskResult
+    activate reviewer
+    activate tester
+    reviewer-->>main: seq7 f8 Verdict
+    deactivate reviewer
+    tester-->>main: seq7 f9 Verdict + CoverageReport
+    deactivate tester
+
+    main->>auditor: seq8 f10 async 120s: TaskResult + Verdictx2 + CovRpt
+    activate auditor
+    auditor-->>main: seq9 f11 Verdict (13项checklist)
+    deactivate auditor
+
+    Note over main: seq10 2/3裁决 → Decision + TokenReport + Snap(t1) + RoundSummary
+
+    main->>publicist: seq10 f12 TaskResult + Decision
+    activate publicist
+    publicist-->>main: seq11 f13 MemoryEntry (反馈 → seq2)
+    deactivate publicist
+
+    Note over main: fR: retry|next_kr → seq3 (最多重试3次)
 ```
 
 ---
