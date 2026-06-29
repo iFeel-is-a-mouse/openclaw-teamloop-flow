@@ -81,6 +81,7 @@ sequenceDiagram
 
 ```bash
 /goal handler layer branch coverage 0%→≥50%, budget≤¥20
+/team-loop src/handlers/ complete tests, coverage≥80%
 ```
 
 ---
@@ -171,6 +172,7 @@ sequenceDiagram
 
 ```bash
 /goal handler层分支覆盖率 0%→≥50%，预算≤¥20
+/team-loop src/handlers/ 补全测试，覆盖率≥80%
 ```
 
 ---
