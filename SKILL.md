@@ -5,8 +5,11 @@ description: >
   the MA agent team autonomously executes plan→execute→verify→memorize→replan
   cycles. Humans define the goal but stay out of the loop. Suitable for
   quantifiable goals: coverage, migration, refactoring, test completion.
-  Intent keywords: autonomous-loop, self-verifying, TDD, adversarial-validation,
-  breakpoint-resume, token-budget, coverage-gate, snapshot, interaction-id.
+intent: >
+  autonomous-loop, self-verifying, TDD, adversarial-validation,
+  breakpoint-resume, token-budget, coverage-gate, snapshot, interaction-id,
+  health-score, exception-capture, three-tier-KR, 2/3-voting, RSF, watchdog,
+  budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
   version: "2.3"
