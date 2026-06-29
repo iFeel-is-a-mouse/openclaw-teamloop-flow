@@ -11,10 +11,10 @@ flowchart TD
     GOAL["/goal &lt;target&gt;"]
     S1["seq1 main(GoalAgent)&#58; Parse → StandardGoal"]
     S2["seq2 main(Planner)&#58; Read RDF → 3-tier KR → TaskDAG + TokenEst"]
-    S3["seq3 main(Controller)&#58; Pick KR → TaskUnit + Snap(t0)&#58; /status + budget guard"]
-    S4["seq4 main(Controller)&#58; Spawn coder [300s]"]
+    S3["seq3 main(Controller)&#58; Pick KR → TaskUnit + Snap(t0) | /status + budget guard"]
+    S4["seq4 main(Controller)&#58; Spawn coder 300s"]
     S5["seq5 coder(Executor)&#58; TDD 3-step → TaskResult + commit"]
-    S6["seq6 main(Monitor)&#58; Distribute [120s]"]
+    S6["seq6 main(Monitor)&#58; Distribute 120s"]
     S7R["seq7 reviewer(Critic)&#58; Correctness → Verdict"]
     S7T["seq7 tester(Critic)&#58; Dynamic + Coverage → Verdict + CovRpt"]
     S8["seq8 main(Monitor)&#58; Collect → spawn auditor"]
@@ -24,20 +24,20 @@ flowchart TD
     STOP["Stop: all-KR | FATAL | BUDGET | max_rounds | stagnation | escape | watchdog"]
 
     GOAL --> S1
-    S1 -->|f1 StandardGoal| S2
-    S2 -->|f2 TaskDAG+TokEst| S3
-    S3 -->|f3 TaskUnit| S4
-    S4 -->|f4 async [300s]| S5
-    S5 -->|f5 TaskResult| S6
-    S6 -->|f6 TaskResult| S7R
-    S6 -->|f7 TaskResult| S7T
-    S7R -->|f8 Verdict| S8
-    S7T -->|f9 Verdict+CovRpt| S8
-    S8 -->|f10 TaskResult+Verdict×2+CovRpt| S9
-    S9 -->|f11 Verdict| S10
-    S10 -->|f12 TaskResult+Decision| S11
-    S11 -->|f13 MemoryEntry feedback| S2
-    S10 -->|fR retry&#124;next_kr| S3
+    S1 -->|"f1 StandardGoal"| S2
+    S2 -->|"f2 TaskDAG + TokEst"| S3
+    S3 -->|"f3 TaskUnit"| S4
+    S4 -->|"f4 async 300s"| S5
+    S5 -->|"f5 TaskResult"| S6
+    S6 -->|"f6 TaskResult"| S7R
+    S6 -->|"f7 TaskResult"| S7T
+    S7R -->|"f8 Verdict"| S8
+    S7T -->|"f9 Verdict + CovRpt"| S8
+    S8 -->|"f10 TskRes + Verdictx2 + CovRpt 120s"| S9
+    S9 -->|"f11 Verdict"| S10
+    S10 -->|"f12 TaskResult + Decision"| S11
+    S11 -->|"f13 MemoryEntry feedback"| S2
+    S10 -->|"fR retry / next_kr"| S3
     S10 --> STOP
 ```
 
@@ -101,10 +101,10 @@ flowchart TD
     GOAL["/goal &lt;目标&gt;"]
     S1["seq1 main(GoalAgent)&#58; 解析 → StandardGoal"]
     S2["seq2 main(Planner)&#58; 读RDF → 三层KR → TaskDAG + TokenEst"]
-    S3["seq3 main(Controller)&#58; 取就绪KR → TaskUnit + Snap(t0)&#58; /status + 预算守卫"]
-    S4["seq4 main(Controller)&#58; 下发coder [300s]"]
+    S3["seq3 main(Controller)&#58; 取就绪KR → TaskUnit + Snap(t0) | /status + 预算守卫"]
+    S4["seq4 main(Controller)&#58; 下发coder 300s"]
     S5["seq5 coder(Executor)&#58; TDD三步 → TaskResult + commit"]
-    S6["seq6 main(Monitor)&#58; 分发 [120s]"]
+    S6["seq6 main(Monitor)&#58; 分发 120s"]
     S7R["seq7 reviewer(Critic)&#58; 正确性审查 → Verdict"]
     S7T["seq7 tester(Critic)&#58; 动态验证 + 覆盖率 → Verdict + CovRpt"]
     S8["seq8 main(Monitor)&#58; 收判决 → 发auditor"]
@@ -114,20 +114,20 @@ flowchart TD
     STOP["停止: all-KR | FATAL | BUDGET | max_rounds | stagnation | 逃逸 | watchdog"]
 
     GOAL --> S1
-    S1 -->|f1 StandardGoal| S2
-    S2 -->|f2 TaskDAG+TokEst| S3
-    S3 -->|f3 TaskUnit| S4
-    S4 -->|f4 async [300s]| S5
-    S5 -->|f5 TaskResult| S6
-    S6 -->|f6 TaskResult| S7R
-    S6 -->|f7 TaskResult| S7T
-    S7R -->|f8 Verdict| S8
-    S7T -->|f9 Verdict+CovRpt| S8
-    S8 -->|f10 TaskResult+Verdict×2+CovRpt| S9
-    S9 -->|f11 Verdict| S10
-    S10 -->|f12 TaskResult+Decision| S11
-    S11 -->|f13 MemoryEntry 反馈| S2
-    S10 -->|fR retry&#124;next_kr| S3
+    S1 -->|"f1 StandardGoal"| S2
+    S2 -->|"f2 TaskDAG + TokEst"| S3
+    S3 -->|"f3 TaskUnit"| S4
+    S4 -->|"f4 async 300s"| S5
+    S5 -->|"f5 TaskResult"| S6
+    S6 -->|"f6 TaskResult"| S7R
+    S6 -->|"f7 TaskResult"| S7T
+    S7R -->|"f8 Verdict"| S8
+    S7T -->|"f9 Verdict + CovRpt"| S8
+    S8 -->|"f10 TskRes + Verdictx2 + CovRpt 120s"| S9
+    S9 -->|"f11 Verdict"| S10
+    S10 -->|"f12 TaskResult + Decision"| S11
+    S11 -->|"f13 MemoryEntry 反馈"| S2
+    S10 -->|"fR retry / next_kr"| S3
     S10 --> STOP
 ```
 
