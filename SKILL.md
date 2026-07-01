@@ -1,12 +1,13 @@
 ---
 name: team-loop
 description: >
-  Goal-driven autonomous task loop engine. 触发词：/team-loop、迭代研发。
-  人类设定可量化目标（如覆盖率≥50%），agent 团队自主执行
-  plan→execute→verify→memorize→replan 循环，人类不介入执行过程。
-  适用于：覆盖率提升、代码迁移、重构、测试补全、token-budget 任务。
-  与 team-dev 的区别：team-dev 是阶段性瀑布交付（spec→design→code→test），
-  team-loop 是目标驱动的循环引擎，自主迭代直到达标。
+  Goal-driven autonomous task loop engine. Triggered by /team-loop or 迭代研发.
+  Human sets a quantifiable goal (e.g., coverage ≥ 50%), agent team autonomously
+  executes plan→execute→verify→memorize→replan cycles with zero human intervention.
+  Suitable for: coverage improvement, code migration, refactoring, test completion,
+  token-budget tasks.
+  Unlike team-dev (waterfall: spec→design→code→test), team-loop is a goal-driven
+  loop engine that self-iterates until the target is met.
 intent: >
   autonomous-loop, self-verifying, goal-driven, quantifiable-target,
   TDD, adversarial-validation, breakpoint-resume, token-budget,
@@ -15,7 +16,7 @@ intent: >
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
-  version: "2.3.1"
+  version: "2.3.2"
   openclaw:
     emoji: "🔄"
 ---
