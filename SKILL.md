@@ -21,7 +21,8 @@ metadata:
     emoji: "🔄"
 ---
 
-# team-loop — Autonomous Task Loop Engine
+# team-loop
+- Autonomous Task Loop Engine
 
 ## Overview
 
