@@ -1,14 +1,17 @@
 ---
 name: team-loop
 description: >
-  Goal-driven autonomous task loop engine. Triggered by /goal or /team-loop,
-  the MA agent team autonomously executes plan→execute→verify→memorize→replan
-  cycles. Humans define the goal but stay out of the loop. Suitable for
-  quantifiable goals: coverage, migration, refactoring, test completion.
+  Goal-driven autonomous task loop engine. 触发词：/team-loop、迭代研发。
+  人类设定可量化目标（如覆盖率≥50%），agent 团队自主执行
+  plan→execute→verify→memorize→replan 循环，人类不介入执行过程。
+  适用于：覆盖率提升、代码迁移、重构、测试补全、token-budget 任务。
+  与 team-dev 的区别：team-dev 是阶段性瀑布交付（spec→design→code→test），
+  team-loop 是目标驱动的循环引擎，自主迭代直到达标。
 intent: >
-  autonomous-loop, self-verifying, TDD, adversarial-validation,
-  breakpoint-resume, token-budget, coverage-gate, snapshot, interaction-id,
-  health-score, exception-capture, three-tier-KR, 2/3-voting, RSF, watchdog,
+  autonomous-loop, self-verifying, goal-driven, quantifiable-target,
+  TDD, adversarial-validation, breakpoint-resume, token-budget,
+  coverage-gate, snapshot, interaction-id, health-score,
+  exception-capture, three-tier-KR, 2/3-voting, RSF, watchdog,
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
@@ -23,7 +26,7 @@ metadata:
 
 Upgrades the MA agent team from human-driven waterfall delivery to goal-driven autonomous looping.
 
-- **Input:** `/goal <quantifiable goal>` or `/team-loop <goal>`
+- **Input:** `/team-loop <quantifiable goal>` or `迭代研发 <quantifiable goal>`
 - **Flow:** Initialize → Decompose KRs → Dispatch agents → Adversarial verification → Memorize → Next round
 - **Output:** Incremental deliverables + State snapshots + Audit reports + Token bills
 - **Human involvement only:** Goal setting, abnormal termination, budget confirmation
