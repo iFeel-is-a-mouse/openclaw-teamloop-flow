@@ -46,15 +46,15 @@ Upgrades the MA agent team from human-driven waterfall delivery to goal-driven a
 ## Trigger
 
 ```
-/goal <quantifiable goal> [budget≤¥N] [max_rounds=N]
+迭代研发 <quantifiable goal> [budget≤¥N] [max_rounds=N]
 /team-loop <goal>
 ```
 
 Examples:
 ```
-/goal handler-layer branch coverage 0%→≥50%, budget≤¥20
-/goal old-pkg → new-pkg migration, all tests pass
-/goal src/handlers/ complete tests, coverage≥80%
+迭代研发 handler-layer branch coverage 0%→≥50%, budget≤¥20
+迭代研发 old-pkg → new-pkg migration, all tests pass
+迭代研發 src/handlers/ complete tests, coverage≥80%
 ```
 
 ---
@@ -637,7 +637,7 @@ L1 syntax (pytest collection succeeds) → L2 functional (pass + line > 80% + br
 
 ## Verification Checklist
 
-- [ ] /goal and /team-loop recognize and reject non-quantifiable goals
+- [ ] 迭代研发 and /team-loop recognize and reject non-quantifiable goals
 - [ ] seq0 initialization complete (loop_id/interaction_id/directories/watchdog/config.json)
 - [ ] Three-tier KRs correctly decomposed
 - [ ] coder TDD three-step, does not self-review
@@ -667,7 +667,7 @@ L1 syntax (pytest collection succeeds) → L2 functional (pass + line > 80% + br
 ## FAQ
 
 **Q: team-loop vs team dev mode?**
-`/goal` or `/team-loop` → team-loop autonomous loop; `团队研发` → 12-stage waterfall. Same main.
+`迭代研发` or `/team-loop` → team-loop autonomous loop; `团队研发` → 12-stage waterfall. Same main.
 
 **Q: What goals are unsuitable?**
 Non-quantifiable ("improve quality"), exploratory ("try optimizing"), requiring frequent human judgment.
