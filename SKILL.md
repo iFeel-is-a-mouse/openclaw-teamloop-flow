@@ -15,7 +15,7 @@ intent: >
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
-  version: "2.3"
+  version: "2.3.1"
   openclaw:
     emoji: "🔄"
 ---
