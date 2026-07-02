@@ -1,7 +1,8 @@
 ---
 name: team-loop
 description: >
-  Goal-driven autonomous task loop engine. Triggered by /team-loop or 迭代研发.
+  Autonomous task loop engine — self-verifying, goal-driven, human-out-of-loop.
+  Triggered by /team-loop or 迭代研发.
   Human sets a quantifiable goal (e.g., coverage ≥ 50%), agent team autonomously
   executes plan→execute→verify→memorize→replan cycles with zero human intervention.
   Suitable for: coverage improvement, code migration, refactoring, test completion,
@@ -16,7 +17,7 @@ intent: >
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
-  version: "2.3.3"
+  version: "2.3.4"
   openclaw:
     emoji: "🔄"
 ---
