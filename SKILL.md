@@ -17,7 +17,7 @@ intent: >
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
-  version: "2.3.7"
+  version: "2.3.8"
   openclaw:
     emoji: "🔄"
 ---
@@ -29,7 +29,7 @@ metadata:
 
 Upgrades the MA agent team from human-driven waterfall delivery to goal-driven autonomous looping.
 
-- **Input:** `/team-loop <quantifiable goal>` or `迭代研发 <quantifiable goal>`
+- **Input:** `team-loop <quantifiable goal>` or `迭代研发 <quantifiable goal>`
 - **Flow:** Initialize → Decompose KRs → Dispatch agents → Adversarial verification → Memorize → Next round
 - **Output:** Incremental deliverables + State snapshots + Audit reports + Token bills
 - **Human involvement only:** Goal setting, abnormal termination, budget confirmation
@@ -641,7 +641,7 @@ L1 syntax (pytest collection succeeds) → L2 functional (pass + line > 80% + br
 
 ## Verification Checklist
 
-- [ ] 迭代研发 and /team-loop recognize and reject non-quantifiable goals
+- [ ] 迭代研发 and team-loop recognize and reject non-quantifiable goals
 - [ ] seq0 initialization complete (loop_id/interaction_id/directories/watchdog/config.json)
 - [ ] Three-tier KRs correctly decomposed
 - [ ] coder TDD three-step, does not self-review
@@ -671,7 +671,7 @@ L1 syntax (pytest collection succeeds) → L2 functional (pass + line > 80% + br
 ## FAQ
 
 **Q: team-loop vs team dev mode?**
-`迭代研发` or `/team-loop` → team-loop autonomous loop; `团队研发` → 12-stage waterfall. Same main.
+`迭代研发` or `team-loop` → team-loop autonomous loop; `团队研发` → 12-stage waterfall. Same main.
 
 **Q: What goals are unsuitable?**
 Non-quantifiable ("improve quality"), exploratory ("try optimizing"), requiring frequent human judgment.
