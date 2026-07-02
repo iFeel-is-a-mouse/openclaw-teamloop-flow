@@ -2,7 +2,7 @@
 name: team-loop
 description: >
   Autonomous task loop engine — self-verifying, goal-driven, human-out-of-loop.
-  Triggered by: loop, /team-loop, 迭代研发, 迭代.
+  Triggered by: loop, team-loop, 迭代研发, 迭代.
   Human sets a quantifiable goal (e.g., coverage ≥ 50%), agent team autonomously
   executes plan→execute→verify→memorize→replan cycles with zero human intervention.
   Suitable for: coverage improvement, code migration, refactoring, test completion,
@@ -17,7 +17,7 @@ intent: >
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
-  version: "2.3.6"
+  version: "2.3.7"
   openclaw:
     emoji: "🔄"
 ---
@@ -46,17 +46,17 @@ Upgrades the MA agent team from human-driven waterfall delivery to goal-driven a
 
 ## Trigger
 
-loop, /team-loop, 迭代研发, 迭代
+loop, team-loop, 迭代研发, 迭代
 
 Usage:
 ```
-/team-loop <quantifiable goal> [budget≤¥N] [max_rounds=N]
+team-loop <quantifiable goal> [budget≤¥N] [max_rounds=N]
 迭代研发 <quantifiable goal> [budget≤¥N] [max_rounds=N]
 ```
 
 Examples:
 ```
-/team-loop handler-layer branch coverage 0%→≥50%, budget≤¥20
+team-loop handler-layer branch coverage 0%→≥50%, budget≤¥20
 迭代研发 old-pkg → new-pkg migration, all tests pass
 loop src/handlers/ complete tests, coverage≥80%
 ```
