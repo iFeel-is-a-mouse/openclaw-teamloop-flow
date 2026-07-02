@@ -17,13 +17,27 @@ intent: >
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
-  version: "2.3.8"
+  version: "2.4.0"
   openclaw:
     emoji: "🔄"
 ---
 
 # team-loop
 - Autonomous Task Loop Engine
+
+## ⚠️ Important — Read Before Use
+
+team-loop is a **fully autonomous** task loop engine. Once a quantifiable goal is set,
+it will **modify your repository** without further human approval. Be aware:
+
+- **File modification:** Can create, edit, delete source files and tests autonomously
+- **Git operations:** May commit, revert, and branch without confirmation
+- **Test execution:** Runs project code and tests in subprocesses — untrusted code paths may execute
+- **State persistence:** Stores prompts, code context, file paths, and debug logs in `.team-loop/` on disk
+- **Broad triggers:** `loop` and `迭代` are common terms — accidental invocation is possible; always review the goal before confirming
+- **Safeguards:** Set `budget≤¥N` and `max_rounds=N`. Create `.team-loop/STOP` to halt. Use a disposable branch or clone for untrusted work.
+
+**Install only on repositories where autonomous edits, commits, and test execution are acceptable.**
 
 ## Overview
 
