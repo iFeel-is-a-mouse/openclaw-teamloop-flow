@@ -17,7 +17,7 @@ intent: >
   budget-guard, test-death-penalty, separation-of-concerns
 metadata:
   author: iClaw & iFeel
-  version: "2.3.5"
+  version: "2.3.6"
   openclaw:
     emoji: "🔄"
 ---
@@ -46,16 +46,19 @@ Upgrades the MA agent team from human-driven waterfall delivery to goal-driven a
 
 ## Trigger
 
+loop, /team-loop, 迭代研发, 迭代
+
+Usage:
 ```
+/team-loop <quantifiable goal> [budget≤¥N] [max_rounds=N]
 迭代研发 <quantifiable goal> [budget≤¥N] [max_rounds=N]
-/team-loop <goal>
 ```
 
 Examples:
 ```
-迭代研发 handler-layer branch coverage 0%→≥50%, budget≤¥20
+/team-loop handler-layer branch coverage 0%→≥50%, budget≤¥20
 迭代研发 old-pkg → new-pkg migration, all tests pass
-迭代研發 src/handlers/ complete tests, coverage≥80%
+loop src/handlers/ complete tests, coverage≥80%
 ```
 
 ---
